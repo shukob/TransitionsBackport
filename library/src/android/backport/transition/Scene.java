@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.support.transition;
+package android.backport.transition;
 
 import android.content.Context;
 import android.util.SparseArray;
@@ -89,7 +89,7 @@ public final class Scene {
      * the hierarchy specified by the layoutId resource file.
      *
      * <p>This method is hidden because layoutId-based scenes should be
-     * created by the caching factory method {@link android.support.transition.Scene#getCurrentScene(android.view.View)}.</p>
+     * created by the caching factory method {@link android.backport.transition.Scene#getCurrentScene(android.view.View)}.</p>
      *
      * @param sceneRoot The root of the hierarchy in which scene changes
      * and transitions will take place.
@@ -190,7 +190,7 @@ public final class Scene {
     }
 
     /**
-     * Gets the current {@link android.support.transition.Scene} set on the given view. A scene is set on a view
+     * Gets the current {@link android.backport.transition.Scene} set on the given view. A scene is set on a view
      * only if that view is the scene root.
      *
      * @return The current Scene set on this view. A value of null indicates that
@@ -215,8 +215,8 @@ public final class Scene {
      * @param action The runnable whose {@link Runnable#run() run()} method will
      * be called when this scene is entered
      * @see #setExitAction(Runnable)
-     * @see android.support.transition.Scene#Scene(android.view.ViewGroup, int, android.content.Context)
-     * @see android.support.transition.Scene#Scene(android.view.ViewGroup, android.view.ViewGroup)
+     * @see android.backport.transition.Scene#Scene(android.view.ViewGroup, int, android.content.Context)
+     * @see android.backport.transition.Scene#Scene(android.view.ViewGroup, android.view.ViewGroup)
      */
     public void setEnterAction(Runnable action) {
         mEnterAction = action;
@@ -236,8 +236,8 @@ public final class Scene {
      * if an enter action is set.
      *
      * @see #setEnterAction(Runnable)
-     * @see android.support.transition.Scene#Scene(android.view.ViewGroup, int, android.content.Context)
-     * @see android.support.transition.Scene#Scene(android.view.ViewGroup, android.view.ViewGroup)
+     * @see android.backport.transition.Scene#Scene(android.view.ViewGroup, int, android.content.Context)
+     * @see android.backport.transition.Scene#Scene(android.view.ViewGroup, android.view.ViewGroup)
      */
     public void setExitAction(Runnable action) {
         mExitAction = action;

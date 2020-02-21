@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package android.support.transition;
+package android.backport.transition;
 
-import android.support.transition.utils.ArrayMap;
-import android.support.transition.utils.OverlayCompatibilityHelper;
+import android.backport.transition.utils.ArrayMap;
+import android.backport.transition.utils.OverlayCompatibilityHelper;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -27,11 +27,11 @@ import java.util.ArrayList;
 
 /**
  * This class manages the set of transitions that fire when there is a
- * change of {@link android.support.transition.Scene}. To use the manager, add scenes along with
- * transition objects with calls to {@link #setTransition(android.support.transition.Scene, android.support.transition.Transition)}
- * or {@link #setTransition(android.support.transition.Scene, android.support.transition.Scene, android.support.transition.Transition)}. Setting specific
+ * change of {@link android.backport.transition.Scene}. To use the manager, add scenes along with
+ * transition objects with calls to {@link #setTransition(android.backport.transition.Scene, android.backport.transition.Transition)}
+ * or {@link #setTransition(android.backport.transition.Scene, android.backport.transition.Scene, android.backport.transition.Transition)}. Setting specific
  * transitions for scene changes is not required; by default, a Scene change
- * will use {@link android.support.transition.AutoTransition} to do something reasonable for most
+ * will use {@link android.backport.transition.AutoTransition} to do something reasonable for most
  * situations. Specifying other transitions for particular scene changes is
  * only necessary if the application wants different transition behavior
  * in these situations.
@@ -49,7 +49,7 @@ import java.util.ArrayList;
  * <p>For each of the <code>fromScene</code> and <code>toScene</code> attributes,
  * there is a reference to a standard XML layout file. This is equivalent to
  * creating a scene from a layout in code by calling
- * {@link android.support.transition.Scene#getSceneForLayout(android.view.ViewGroup, int, android.content.Context)}. For the
+ * {@link android.backport.transition.Scene#getSceneForLayout(android.view.ViewGroup, int, android.content.Context)}. For the
  * <code>transition</code> attribute, there is a reference to a resource
  * file in the <code>res/transition</code> directory which describes that
  * transition.</p>
@@ -64,36 +64,36 @@ public class TransitionManager {
 
     private static String LOG_TAG = "TransitionManager";
 
-    private static android.support.transition.Transition sDefaultTransition = new android.support.transition.AutoTransition();
+    private static android.backport.transition.Transition sDefaultTransition = new android.backport.transition.AutoTransition();
 
-    ArrayMap<Scene, Transition> mSceneTransitions = new ArrayMap<android.support.transition.Scene, android.support.transition.Transition>();
-    ArrayMap<android.support.transition.Scene, ArrayMap<android.support.transition.Scene, android.support.transition.Transition>> mScenePairTransitions =
-            new ArrayMap<android.support.transition.Scene, ArrayMap<android.support.transition.Scene, android.support.transition.Transition>>();
-    private static ThreadLocal<WeakReference<ArrayMap<ViewGroup, ArrayList<android.support.transition.Transition>>>>
+    ArrayMap<Scene, Transition> mSceneTransitions = new ArrayMap<android.backport.transition.Scene, android.backport.transition.Transition>();
+    ArrayMap<android.backport.transition.Scene, ArrayMap<android.backport.transition.Scene, android.backport.transition.Transition>> mScenePairTransitions =
+            new ArrayMap<android.backport.transition.Scene, ArrayMap<android.backport.transition.Scene, android.backport.transition.Transition>>();
+    private static ThreadLocal<WeakReference<ArrayMap<ViewGroup, ArrayList<android.backport.transition.Transition>>>>
             sRunningTransitions =
-            new ThreadLocal<WeakReference<ArrayMap<ViewGroup, ArrayList<android.support.transition.Transition>>>>();
+            new ThreadLocal<WeakReference<ArrayMap<ViewGroup, ArrayList<android.backport.transition.Transition>>>>();
     private static ArrayList<ViewGroup> sPendingTransitions = new ArrayList<ViewGroup>();
 
 
     /**
      * Sets the transition to be used for any scene change for which no
      * other transition is explicitly set. The initial value is
-     * an {@link android.support.transition.AutoTransition} instance.
+     * an {@link android.backport.transition.AutoTransition} instance.
      *
      * @param transition The default transition to be used for scene changes.
      */
-    public void setDefaultTransition(android.support.transition.Transition transition) {
+    public void setDefaultTransition(android.backport.transition.Transition transition) {
         sDefaultTransition = transition;
     }
 
     /**
      * Gets the current default transition. The initial value is an {@link
-     * android.support.transition.AutoTransition} instance.
+     * android.backport.transition.AutoTransition} instance.
      *
      * @return The current default transition.
-     * @see #setDefaultTransition(android.support.transition.Transition)
+     * @see #setDefaultTransition(android.backport.transition.Transition)
      */
-    public static android.support.transition.Transition getDefaultTransition() {
+    public static android.backport.transition.Transition getDefaultTransition() {
         return sDefaultTransition;
     }
 
@@ -106,7 +106,7 @@ public class TransitionManager {
      * entered. A value of null will result in the default behavior of
      * using the {@link #getDefaultTransition() default transition} instead.
      */
-    public void setTransition(android.support.transition.Scene scene, android.support.transition.Transition transition) {
+    public void setTransition(android.backport.transition.Scene scene, android.backport.transition.Transition transition) {
         mSceneTransitions.put(scene, transition);
     }
 
@@ -122,10 +122,10 @@ public class TransitionManager {
      * entered. A value of null will result in the default behavior of
      * using the {@link #getDefaultTransition() default transition} instead.
      */
-    public void setTransition(android.support.transition.Scene fromScene, android.support.transition.Scene toScene, android.support.transition.Transition transition) {
-        ArrayMap<android.support.transition.Scene, android.support.transition.Transition> sceneTransitionMap = mScenePairTransitions.get(toScene);
+    public void setTransition(android.backport.transition.Scene fromScene, android.backport.transition.Scene toScene, android.backport.transition.Transition transition) {
+        ArrayMap<android.backport.transition.Scene, android.backport.transition.Transition> sceneTransitionMap = mScenePairTransitions.get(toScene);
         if (sceneTransitionMap == null) {
-            sceneTransitionMap = new ArrayMap<android.support.transition.Scene, android.support.transition.Transition>();
+            sceneTransitionMap = new ArrayMap<android.backport.transition.Scene, android.backport.transition.Transition>();
             mScenePairTransitions.put(toScene, sceneTransitionMap);
         }
         sceneTransitionMap.put(fromScene, transition);
@@ -134,21 +134,21 @@ public class TransitionManager {
     /**
      * Returns the Transition for the given scene being entered. The result
      * depends not only on the given scene, but also the scene which the
-     * {@link android.support.transition.Scene#getSceneRoot() sceneRoot} of the Scene is currently in.
+     * {@link android.backport.transition.Scene#getSceneRoot() sceneRoot} of the Scene is currently in.
      *
      * @param scene The scene being entered
      * @return The Transition to be used for the given scene change. If no
      * Transition was specified for this scene change, the {@link #getDefaultTransition()
      * default transition} will be used instead.
      */
-    private android.support.transition.Transition getTransition(android.support.transition.Scene scene) {
-        android.support.transition.Transition transition = null;
+    private android.backport.transition.Transition getTransition(android.backport.transition.Scene scene) {
+        android.backport.transition.Transition transition = null;
         ViewGroup sceneRoot = scene.getSceneRoot();
         if (sceneRoot != null) {
             // TODO: cached in Scene instead? long-term, cache in View itself
-            android.support.transition.Scene currScene = android.support.transition.Scene.getCurrentScene(sceneRoot);
+            android.backport.transition.Scene currScene = android.backport.transition.Scene.getCurrentScene(sceneRoot);
             if (currScene != null) {
-                ArrayMap<android.support.transition.Scene, android.support.transition.Transition> sceneTransitionMap = mScenePairTransitions.get(scene);
+                ArrayMap<android.backport.transition.Scene, android.backport.transition.Transition> sceneTransitionMap = mScenePairTransitions.get(scene);
                 if (sceneTransitionMap != null) {
                     transition = sceneTransitionMap.get(currScene);
                     if (transition != null) {
@@ -171,14 +171,14 @@ public class TransitionManager {
      * @param scene The scene being entered
      * @param transition The transition to play for this scene change
      */
-    private static void changeScene(android.support.transition.Scene scene, android.support.transition.Transition transition) {
+    private static void changeScene(android.backport.transition.Scene scene, android.backport.transition.Transition transition) {
 
         final ViewGroup sceneRoot = scene.getSceneRoot();
 
-        android.support.transition.Transition transitionClone = transition.clone();
+        android.backport.transition.Transition transitionClone = transition.clone();
         transitionClone.setSceneRoot(sceneRoot);
 
-        android.support.transition.Scene oldScene = android.support.transition.Scene.getCurrentScene(sceneRoot);
+        android.backport.transition.Scene oldScene = android.backport.transition.Scene.getCurrentScene(sceneRoot);
         if (oldScene != null && oldScene.isCreatedFromLayoutResource()) {
             transitionClone.setCanRemoveViews(true);
         }
@@ -190,13 +190,13 @@ public class TransitionManager {
         sceneChangeRunTransition(sceneRoot, transitionClone);
     }
 
-    private static ArrayMap<ViewGroup, ArrayList<android.support.transition.Transition>> getRunningTransitions() {
-        WeakReference<ArrayMap<ViewGroup, ArrayList<android.support.transition.Transition>>> runningTransitions =
+    private static ArrayMap<ViewGroup, ArrayList<android.backport.transition.Transition>> getRunningTransitions() {
+        WeakReference<ArrayMap<ViewGroup, ArrayList<android.backport.transition.Transition>>> runningTransitions =
                 sRunningTransitions.get();
         if (runningTransitions == null || runningTransitions.get() == null) {
-            ArrayMap<ViewGroup, ArrayList<android.support.transition.Transition>> transitions =
-                    new ArrayMap<ViewGroup, ArrayList<android.support.transition.Transition>>();
-            runningTransitions = new WeakReference<ArrayMap<ViewGroup, ArrayList<android.support.transition.Transition>>>(
+            ArrayMap<ViewGroup, ArrayList<android.backport.transition.Transition>> transitions =
+                    new ArrayMap<ViewGroup, ArrayList<android.backport.transition.Transition>>();
+            runningTransitions = new WeakReference<ArrayMap<ViewGroup, ArrayList<android.backport.transition.Transition>>>(
                     transitions);
             sRunningTransitions.set(runningTransitions);
         }
@@ -204,7 +204,7 @@ public class TransitionManager {
     }
 
     private static void sceneChangeRunTransition(final ViewGroup sceneRoot,
-            final android.support.transition.Transition transition) {
+            final android.backport.transition.Transition transition) {
         if (transition != null) {
             OverlayCompatibilityHelper.addViewOverlayCompat(sceneRoot);
             final ViewTreeObserver observer = sceneRoot.getViewTreeObserver();
@@ -214,28 +214,28 @@ public class TransitionManager {
                     sceneRoot.getViewTreeObserver().removeOnPreDrawListener(this);
                     sPendingTransitions.remove(sceneRoot);
                     // Add to running list, handle end to remove it
-                    final ArrayMap<ViewGroup, ArrayList<android.support.transition.Transition>> runningTransitions =
+                    final ArrayMap<ViewGroup, ArrayList<android.backport.transition.Transition>> runningTransitions =
                             getRunningTransitions();
-                    ArrayList<android.support.transition.Transition> currentTransitions = runningTransitions.get(sceneRoot);
-                    ArrayList<android.support.transition.Transition> previousRunningTransitions = null;
+                    ArrayList<android.backport.transition.Transition> currentTransitions = runningTransitions.get(sceneRoot);
+                    ArrayList<android.backport.transition.Transition> previousRunningTransitions = null;
                     if (currentTransitions == null) {
-                        currentTransitions = new ArrayList<android.support.transition.Transition>();
+                        currentTransitions = new ArrayList<android.backport.transition.Transition>();
                         runningTransitions.put(sceneRoot, currentTransitions);
                     } else if (currentTransitions.size() > 0) {
-                        previousRunningTransitions = new ArrayList<android.support.transition.Transition>(currentTransitions);
+                        previousRunningTransitions = new ArrayList<android.backport.transition.Transition>(currentTransitions);
                     }
                     currentTransitions.add(transition);
-                    transition.addListener(new android.support.transition.Transition.TransitionListenerAdapter() {
+                    transition.addListener(new android.backport.transition.Transition.TransitionListenerAdapter() {
                         @Override
-                        public void onTransitionEnd(android.support.transition.Transition transition) {
-                            ArrayList<android.support.transition.Transition> currentTransitions =
+                        public void onTransitionEnd(android.backport.transition.Transition transition) {
+                            ArrayList<android.backport.transition.Transition> currentTransitions =
                                     runningTransitions.get(sceneRoot);
                             currentTransitions.remove(transition);
                         }
                     });
                     transition.captureValues(sceneRoot, false);
                     if (previousRunningTransitions != null) {
-                        for (android.support.transition.Transition runningTransition : previousRunningTransitions) {
+                        for (android.backport.transition.Transition runningTransition : previousRunningTransitions) {
                             runningTransition.resume();
                         }
                     }
@@ -248,13 +248,13 @@ public class TransitionManager {
         }
     }
 
-    private static void sceneChangeSetup(ViewGroup sceneRoot, android.support.transition.Transition transition) {
+    private static void sceneChangeSetup(ViewGroup sceneRoot, android.backport.transition.Transition transition) {
 
         // Capture current values
-        ArrayList<android.support.transition.Transition> runningTransitions = getRunningTransitions().get(sceneRoot);
+        ArrayList<android.backport.transition.Transition> runningTransitions = getRunningTransitions().get(sceneRoot);
 
         if (runningTransitions != null && runningTransitions.size() > 0) {
-            for (android.support.transition.Transition runningTransition : runningTransitions) {
+            for (android.backport.transition.Transition runningTransition : runningTransitions) {
                 runningTransition.pause();
             }
         }
@@ -264,7 +264,7 @@ public class TransitionManager {
         }
 
         // Notify previous scene that it is being exited
-        android.support.transition.Scene previousScene = android.support.transition.Scene.getCurrentScene(sceneRoot);
+        android.backport.transition.Scene previousScene = android.backport.transition.Scene.getCurrentScene(sceneRoot);
         if (previousScene != null) {
             previousScene.exit();
         }
@@ -278,7 +278,7 @@ public class TransitionManager {
      *
      * @param scene The Scene to change to
      */
-    public void transitionTo(android.support.transition.Scene scene) {
+    public void transitionTo(android.backport.transition.Scene scene) {
         // Auto transition if there is no transition declared for the Scene, but there is
         // a root or parent view
         changeScene(scene, getTransition(scene));
@@ -291,7 +291,7 @@ public class TransitionManager {
      *
      * @param scene The Scene to change to
      */
-    public static void go(android.support.transition.Scene scene) {
+    public static void go(android.backport.transition.Scene scene) {
         changeScene(scene, sDefaultTransition);
     }
 
@@ -301,15 +301,15 @@ public class TransitionManager {
      *
      * <p>Passing in <code>null</code> for the transition parameter will
      * result in the scene changing without any transition running, and is
-     * equivalent to calling {@link android.support.transition.Scene#exit()} on the scene root's
-     * current scene, followed by {@link android.support.transition.Scene#enter()} on the scene
+     * equivalent to calling {@link android.backport.transition.Scene#exit()} on the scene root's
+     * current scene, followed by {@link android.backport.transition.Scene#enter()} on the scene
      * specified by the <code>scene</code> parameter.</p>
      *
      * @param scene The Scene to change to
      * @param transition The transition to use for this scene change. A
      * value of null causes the scene change to happen with no transition.
      */
-    public static void go(android.support.transition.Scene scene, android.support.transition.Transition transition) {
+    public static void go(android.backport.transition.Scene scene, android.backport.transition.Transition transition) {
         changeScene(scene, transition);
     }
 
@@ -317,7 +317,7 @@ public class TransitionManager {
      * Convenience method to animate, using the default transition,
      * to a new scene defined by all changes within the given scene root between
      * calling this method and the next rendering frame.
-     * Equivalent to calling {@link #beginDelayedTransition(android.view.ViewGroup, android.support.transition.Transition)}
+     * Equivalent to calling {@link #beginDelayedTransition(android.view.ViewGroup, android.backport.transition.Transition)}
      * with a value of <code>null</code> for the <code>transition</code> parameter.
      *
      * @param sceneRoot The root of the View hierarchy to run the transition on.
@@ -349,12 +349,12 @@ public class TransitionManager {
      * @param transition The transition to use for this change. A
      * value of null causes the TransitionManager to use the default transition.
      */
-    public static void beginDelayedTransition(final ViewGroup sceneRoot, android.support.transition.Transition transition) {
+    public static void beginDelayedTransition(final ViewGroup sceneRoot, android.backport.transition.Transition transition) {
         if (!sPendingTransitions.contains(sceneRoot)
                 //TODO
                 //& sceneRoot.isLaidOut()
                 ) {
-            if (android.support.transition.Transition.DBG) {
+            if (android.backport.transition.Transition.DBG) {
                 Log.d(LOG_TAG, "beginDelayedTransition: root, transition = " +
                         sceneRoot + ", " + transition);
             }
@@ -362,7 +362,7 @@ public class TransitionManager {
             if (transition == null) {
                 transition = sDefaultTransition;
             }
-            final android.support.transition.Transition transitionClone = transition.clone();
+            final android.backport.transition.Transition transitionClone = transition.clone();
             sceneChangeSetup(sceneRoot, transitionClone);
             Scene.setCurrentScene(sceneRoot, null);
             sceneChangeRunTransition(sceneRoot, transitionClone);

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package android.support.transition;
+package android.backport.transition;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
-import android.support.transition.utils.ArrayMap;
+import android.backport.transition.utils.ArrayMap;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.util.Xml;
@@ -51,7 +51,7 @@ public class TransitionInflater {
 
     private Context mContext;
     // TODO: do we need id maps for transitions and transitionMgrs as well?
-    SparseArray<android.support.transition.Scene> mScenes = new SparseArray<android.support.transition.Scene>();
+    SparseArray<android.backport.transition.Scene> mScenes = new SparseArray<android.backport.transition.Scene>();
 
     private TransitionInflater(Context context) {
         mContext = context;
@@ -71,14 +71,14 @@ public class TransitionInflater {
     }
 
     /**
-     * Loads a {@link android.support.transition.Transition} object from a resource
+     * Loads a {@link android.backport.transition.Transition} object from a resource
      *
      * @param resource The resource id of the transition to load
      * @return The loaded Transition object
      * @throws android.content.res.Resources.NotFoundException when the
      * transition cannot be loaded
      */
-    public android.support.transition.Transition inflateTransition(int resource) {
+    public android.backport.transition.Transition inflateTransition(int resource) {
         XmlResourceParser parser =  mContext.getResources().getXml(resource);
         try {
             return createTransitionFromXml(parser, Xml.asAttributeSet(parser), null);
@@ -98,7 +98,7 @@ public class TransitionInflater {
     }
 
     /**
-     * Loads a {@link android.support.transition.TransitionManager} object from a resource
+     * Loads a {@link android.backport.transition.TransitionManager} object from a resource
      *
      *
      *
@@ -130,11 +130,11 @@ public class TransitionInflater {
     // Transition loading
     //
 
-    private android.support.transition.Transition createTransitionFromXml(XmlPullParser parser,
-            AttributeSet attrs, TransitionSet transitionSet)
+    private android.backport.transition.Transition createTransitionFromXml(XmlPullParser parser,
+                                                                   AttributeSet attrs, TransitionSet transitionSet)
             throws XmlPullParserException, IOException {
 
-        android.support.transition.Transition transition = null;
+        android.backport.transition.Transition transition = null;
 
         // Make sure we are on a start tag.
         int type;
@@ -154,8 +154,8 @@ public class TransitionInflater {
                 TypedArray a = mContext.obtainStyledAttributes(attrs,
                         com.guerwan.transitionsbackport.R.styleable.Fade);
                 int fadingMode = a.getInt(com.guerwan.transitionsbackport.R.styleable.Fade_fadingMode,
-                        android.support.transition.Fade.IN | android.support.transition.Fade.OUT);
-                transition = new android.support.transition.Fade(fadingMode);
+                        android.backport.transition.Fade.IN | android.backport.transition.Fade.OUT);
+                transition = new android.backport.transition.Fade(fadingMode);
                 newTransition = true;
             } else if ("changeBounds".equals(name)) {
                 transition = new ChangeBounds();
@@ -205,7 +205,7 @@ public class TransitionInflater {
     }
 
     private void getTargetIds(XmlPullParser parser,
-            AttributeSet attrs, android.support.transition.Transition transition) throws XmlPullParserException, IOException {
+            AttributeSet attrs, android.backport.transition.Transition transition) throws XmlPullParserException, IOException {
 
         // Make sure we are on a start tag.
         int type;
@@ -240,7 +240,7 @@ public class TransitionInflater {
         }
     }
 
-    private android.support.transition.Transition loadTransition(android.support.transition.Transition transition, AttributeSet attrs)
+    private android.backport.transition.Transition loadTransition(android.backport.transition.Transition transition, AttributeSet attrs)
             throws Resources.NotFoundException {
 
         TypedArray a =
@@ -300,10 +300,10 @@ public class TransitionInflater {
                 com.guerwan.transitionsbackport.R.styleable.TransitionManager);
         int transitionId = a.getResourceId(
                 com.guerwan.transitionsbackport.R.styleable.TransitionManager_transition, -1);
-        android.support.transition.Scene fromScene = null, toScene = null;
+        android.backport.transition.Scene fromScene = null, toScene = null;
         int fromId = a.getResourceId(
                 com.guerwan.transitionsbackport.R.styleable.TransitionManager_fromScene, -1);
-        if (fromId >= 0) fromScene = android.support.transition.Scene.getSceneForLayout(sceneRoot, fromId, mContext);
+        if (fromId >= 0) fromScene = android.backport.transition.Scene.getSceneForLayout(sceneRoot, fromId, mContext);
         int toId = a.getResourceId(
                 com.guerwan.transitionsbackport.R.styleable.TransitionManager_toScene, -1);
         if (toId >= 0) toScene = Scene.getSceneForLayout(sceneRoot, toId, mContext);

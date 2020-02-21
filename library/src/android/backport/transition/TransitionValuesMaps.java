@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package android.support.transition;
+package android.backport.transition;
 
-import android.support.v4.util.LongSparseArray;
-import android.support.transition.utils.ArrayMap;
+import android.backport.transition.utils.ArrayMap;
 import android.util.SparseArray;
 import android.view.View;
 
+import androidx.collection.LongSparseArray;
+
 class TransitionValuesMaps {
     ArrayMap<View, TransitionValues> viewValues =
-            new ArrayMap<View, android.support.transition.TransitionValues>();
-    SparseArray<android.support.transition.TransitionValues> idValues = new SparseArray<android.support.transition.TransitionValues>();
-    LongSparseArray<android.support.transition.TransitionValues> itemIdValues =
+            new ArrayMap<View, android.backport.transition.TransitionValues>();
+    SparseArray<android.backport.transition.TransitionValues> idValues = new SparseArray<android.backport.transition.TransitionValues>();
+    LongSparseArray<TransitionValues> itemIdValues =
             new LongSparseArray<TransitionValues>();
 }
